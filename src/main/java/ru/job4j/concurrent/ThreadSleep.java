@@ -1,7 +1,7 @@
 package ru.job4j.concurrent;
 
 public class ThreadSleep {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Thread thread = new Thread(
                 () -> {
                     try {
@@ -15,8 +15,7 @@ public class ThreadSleep {
                 }
         );
         thread.start();
-        while (thread.getState() != Thread.State.TERMINATED) {
-        }
+        thread.join();
         System.out.println("   Loading is completed.");
     }
 }
