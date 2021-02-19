@@ -1,5 +1,7 @@
 package ru.job4j.concurrent;
 
+import static java.lang.Thread.State.TERMINATED;
+
 public class ThreadState {
     public static void main(String[] args) {
         Thread first = new Thread(
@@ -15,10 +17,7 @@ public class ThreadState {
         System.out.println(first.getState());
         first.start();
         second.start();
-        while (first.getState() != Thread.State.TERMINATED
-                && second.getState() != Thread.State.TERMINATED
-        ) {
-            System.out.println(first.getState());
+        while (!(first.getState() == TERMINATED && second.getState() == TERMINATED)) {
         }
         System.out.println(String.format("%s и %s завершили работу",
                 first.getName(), second.getName()));
