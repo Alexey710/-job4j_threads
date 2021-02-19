@@ -17,15 +17,13 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         long speedOf1024Byte = 2141;
-        long delay;
+        long delay = 0;
         if (speed > speedOf1024Byte) {
             delay = (speed - speedOf1024Byte) / 4;
-        } else {
-            delay = 0;
         }
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream
-                     = new FileOutputStream("src/test/resources/pom_tmp.xml")) {
+                     = new FileOutputStream("pom_tmp.xml")) {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
