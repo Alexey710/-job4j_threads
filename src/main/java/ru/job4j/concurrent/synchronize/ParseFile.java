@@ -28,7 +28,7 @@ public class ParseFile {
         StringBuilder sb = new StringBuilder();
         try (InputStream i = new FileInputStream(file)) {
             int data;
-            while ((data = i.read()) > 0) {
+            while ((data = i.read()) != -1) {
                 if (data < 0x80) {
                     sb.append(data);
                 }
