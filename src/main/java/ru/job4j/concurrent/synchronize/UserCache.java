@@ -1,6 +1,7 @@
 package ru.job4j.concurrent.synchronize;
 
-import javax.annotation.concurrent.ThreadSafe;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
