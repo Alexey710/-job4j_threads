@@ -21,8 +21,7 @@ public class IteratorFailSafe<T> implements Iterator {
     public Object next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
-        } else {
-            return container[point++];
         }
+        return container[point++];
     }
 }
