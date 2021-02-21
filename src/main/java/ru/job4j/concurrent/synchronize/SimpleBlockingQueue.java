@@ -20,7 +20,7 @@ public class SimpleBlockingQueue<T> {
 
     public void offer(T value) {
         synchronized (monitor) {
-
+            isEmpty = true;
             if (queue.size() == capacity) {
                 isEmpty = false;
             }
