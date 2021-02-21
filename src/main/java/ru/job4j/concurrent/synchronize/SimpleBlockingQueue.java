@@ -8,18 +8,24 @@ import java.util.Queue;
 
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
-    private final Object monitor = this;
-    private boolean isEmpty = true;
-
     @GuardedBy("this")
     private volatile Queue<T> queue = new LinkedList<>();
+    private final Object monitor = this;
+    private boolean isEmpty = true;
+    private volatile int capacity;
+
+    public SimpleBlockingQueue(int capacity) {
+        this.capacity = capacity;
+    }
 
     public void offer(T value) {
         synchronized (monitor) {
-            if (queue.peek() != null) {
+
+            if (queue.size() == capacity) {
                 isEmpty = false;
             }
             while (!isEmpty) {
+                System.out.println("producer заснул");
                 try {
                     monitor.wait();
                 } catch (InterruptedException e) {
@@ -27,6 +33,8 @@ public class SimpleBlockingQueue<T> {
                 }
             }
             queue.offer(value);
+            System.out.println("добавил");
+            System.out.println(queue.size());
             isEmpty = false;
             monitor.notifyAll();
         }
@@ -39,12 +47,15 @@ public class SimpleBlockingQueue<T> {
             }
             while (isEmpty) {
                 try {
+                    System.out.println("consumer заснул");
                     monitor.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
             T deleted = queue.poll();
+            System.out.println("удалил");
+            System.out.println(queue.size());
             isEmpty = true;
             monitor.notifyAll();
             return deleted;

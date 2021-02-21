@@ -8,13 +8,15 @@ public class SimpleBlockingQueueTest {
 
     @Test
     public void offer() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(1);
         Thread producer = new Thread( () -> {
             for (int i = 0; i < 2; i++) {
                 queue.offer(i);
             }
         });
-        Thread consumer = new Thread(() -> queue.poll());
+        Thread consumer = new Thread(() -> {
+            queue.poll();
+            });
         Thread auditor = new Thread(() ->  {
             while (producer.getState() == RUNNABLE) {
             }
@@ -33,9 +35,16 @@ public class SimpleBlockingQueueTest {
 
     @Test
     public void poll() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
-        Thread consumer = new Thread(queue::poll);
-        Thread producer = new Thread(() -> queue.offer(1));
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(1);
+        Thread consumer = new Thread(() -> {
+            for (int i = 0; i < 1; i++) {
+                queue.poll();
+            }
+        }
+        );
+        Thread producer = new Thread(() -> {
+            queue.offer(1);
+            });
         Thread auditor = new Thread(() ->  {
             while (consumer.getState() == RUNNABLE) {
             }
