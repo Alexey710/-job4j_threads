@@ -2,7 +2,6 @@ package ru.job4j.concurrent.synchronize;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,6 +14,10 @@ public class SimpleBlockingQueue<T> {
 
     public SimpleBlockingQueue(int capacity) {
         this.capacity = capacity;
+    }
+
+    public synchronized boolean isEmpty() {
+        return queue.peek() == null;
     }
 
     public void offer(T value) {
