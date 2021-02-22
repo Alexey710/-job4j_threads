@@ -11,7 +11,6 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private volatile Queue<T> queue = new LinkedList<>();
     private final Object monitor = this;
-    private boolean isEmpty = true;
     private volatile int capacity;
 
     public SimpleBlockingQueue(int capacity) {
@@ -20,11 +19,7 @@ public class SimpleBlockingQueue<T> {
 
     public void offer(T value) {
         synchronized (monitor) {
-            isEmpty = true;
-            if (queue.size() == capacity) {
-                isEmpty = false;
-            }
-            while (!isEmpty) {
+            while (queue.size() == capacity) {
                 System.out.println("producer заснул");
                 try {
                     monitor.wait();
@@ -35,17 +30,13 @@ public class SimpleBlockingQueue<T> {
             queue.offer(value);
             System.out.println("добавил");
             System.out.println(queue.size());
-            isEmpty = false;
             monitor.notifyAll();
         }
     }
 
     public T poll() {
         synchronized (monitor) {
-            if (queue.peek() != null) {
-                isEmpty = false;
-            }
-            while (isEmpty) {
+            while (queue.peek() == null) {
                 try {
                     System.out.println("consumer заснул");
                     monitor.wait();
@@ -56,7 +47,6 @@ public class SimpleBlockingQueue<T> {
             T deleted = queue.poll();
             System.out.println("удалил");
             System.out.println(queue.size());
-            isEmpty = true;
             monitor.notifyAll();
             return deleted;
         }
