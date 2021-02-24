@@ -3,6 +3,7 @@ package ru.job4j.concurrent.synchronize.storage;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,7 +13,7 @@ public class UserStorage implements Store {
     private final Map<Integer, User> map = new ConcurrentHashMap<>();
 
     public synchronized Map<Integer, User> getMap() {
-        return map;
+        return Collections.unmodifiableMap(map);
     }
 
     private synchronized boolean isExist(User user) {
