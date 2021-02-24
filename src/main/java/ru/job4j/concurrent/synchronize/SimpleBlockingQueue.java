@@ -8,9 +8,8 @@ import java.util.Queue;
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
-    private volatile Queue<T> queue = new LinkedList<>();
-    private final Object monitor = this;
-    private volatile int capacity;
+    private final Queue<T> queue = new LinkedList<>();
+    private final int capacity;
 
     public SimpleBlockingQueue(int capacity) {
         this.capacity = capacity;
@@ -21,36 +20,30 @@ public class SimpleBlockingQueue<T> {
     }
 
     public void offer(T value) {
-        synchronized (monitor) {
+        synchronized (this) {
             while (queue.size() == capacity) {
-                System.out.println("producer заснул");
                 try {
-                    monitor.wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
             queue.offer(value);
-            System.out.println("добавил");
-            System.out.println(queue.size());
-            monitor.notifyAll();
+            this.notifyAll();
         }
     }
 
     public T poll() {
-        synchronized (monitor) {
+        synchronized (this) {
             while (queue.peek() == null) {
                 try {
-                    System.out.println("consumer заснул");
-                    monitor.wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
             T deleted = queue.poll();
-            System.out.println("удалил");
-            System.out.println(queue.size());
-            monitor.notifyAll();
+            this.notifyAll();
             return deleted;
         }
     }
