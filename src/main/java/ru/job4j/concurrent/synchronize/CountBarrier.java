@@ -1,36 +1,39 @@
 package ru.job4j.concurrent.synchronize;
 
 public class CountBarrier {
-    private final Object monitor = this;
-    private volatile boolean flag = false;
+    private boolean flag = false;
 
     private final int total;
 
-    private volatile int count = 0;
+    private int count = 0;
 
     public CountBarrier(final int total) {
         this.total = total;
     }
 
+    public synchronized int getCount() {
+        return count;
+    }
+
     public void on() {
-        synchronized (monitor) {
+        synchronized (this) {
             flag = true;
-            monitor.notifyAll();
+            this.notifyAll();
         }
     }
 
     public void off() {
-        synchronized (monitor) {
+        synchronized (this) {
             flag = false;
-            monitor.notifyAll();
+            this.notifyAll();
         }
     }
 
     public void check() {
-        synchronized (monitor) {
+        synchronized (this) {
             while (!flag) {
                 try {
-                    monitor.wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -47,6 +50,7 @@ public class CountBarrier {
 
     public synchronized void await() {
         check();
+        count--;
     }
 
 }
