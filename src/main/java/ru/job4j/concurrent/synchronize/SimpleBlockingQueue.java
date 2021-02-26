@@ -16,11 +16,9 @@ public class SimpleBlockingQueue<T> {
     }
 
     public boolean isEmpty() {
-        boolean rsl = false;
         synchronized (this) {
-            rsl = queue.peek() == null;
+            return queue.isEmpty();
         }
-        return rsl;
     }
 
     public void offer(T value) {
@@ -39,7 +37,7 @@ public class SimpleBlockingQueue<T> {
 
     public T poll() {
         synchronized (this) {
-            while (queue.peek() == null) {
+            while (queue.isEmpty()) {
                 try {
                     this.wait();
                 } catch (InterruptedException e) {
