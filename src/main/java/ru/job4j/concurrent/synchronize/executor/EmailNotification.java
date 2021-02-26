@@ -8,7 +8,7 @@ public class EmailNotification {
             Runtime.getRuntime().availableProcessors()
     );
 
-    synchronized void emailTo(User user) {
+    public void emailTo(User user) {
         String email = user.getEmail();
         String subject = String.format("Notification %s to email %s",
                 user.getUsername(), email);
@@ -21,10 +21,10 @@ public class EmailNotification {
         });
     }
 
-    synchronized void send(String subject, String body, String email) {
+    private void send(String subject, String body, String email) {
     }
 
-    synchronized void close() {
+    public void close() {
         pool.shutdown();
     }
 
