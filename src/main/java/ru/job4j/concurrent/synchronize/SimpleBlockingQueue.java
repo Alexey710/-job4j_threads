@@ -15,8 +15,12 @@ public class SimpleBlockingQueue<T> {
         this.capacity = capacity;
     }
 
-    public synchronized boolean isEmpty() {
-        return queue.peek() == null;
+    public boolean isEmpty() {
+        boolean rsl = false;
+        synchronized (this) {
+            rsl = queue.peek() == null;
+        }
+        return rsl;
     }
 
     public void offer(T value) {
