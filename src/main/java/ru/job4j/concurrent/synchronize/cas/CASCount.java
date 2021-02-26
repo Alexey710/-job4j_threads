@@ -12,22 +12,14 @@ public class CASCount {
         Integer current;
 
         do {
-
             current = count.get();
-            if (current == null) {
-                throw new UnsupportedOperationException("Count is not impl.");
-            }
             next = current + 1;
-
         } while (!count.compareAndSet(current, next));
         System.out.println(next);
     }
 
     public int get() {
         Integer current = count.get();
-        if (current == null) {
-            throw new UnsupportedOperationException("Count is not impl.");
-        }
         return current;
     }
 }
