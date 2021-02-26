@@ -1,7 +1,6 @@
 package ru.job4j.concurrent.synchronize;
 
 import net.jcip.annotations.ThreadSafe;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,10 +19,7 @@ public class ThreadPool {
     }
 
     public void work(Runnable job) {
-        synchronized (tasks) {
-            tasks.offer(job);
-            tasks.notify();
-        }
+        tasks.offer(job);
     }
 
     public void shutdown() {
@@ -33,34 +29,17 @@ public class ThreadPool {
     }
 
     public class PoolWorker extends Thread {
-
         @Override
         public void run() {
-            Runnable task;
-
             while (!Thread.currentThread().isInterrupted()) {
-                synchronized (tasks) {
-                    while (tasks.isEmpty()) {
-                        try {
-                            tasks.wait();
-                        } catch (InterruptedException e) {
-                           e.printStackTrace();
-                        }
-                    }
-                    task = tasks.poll();
-                }
-                try {
-                    task.run();
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
+                tasks.poll().run();
             }
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
         List<Runnable> list = new LinkedList<>();
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 2000; i++) {
             Runnable task = () -> {
                 String threadName = Thread.currentThread().getName();
                 System.out.println("Executed by " + threadName);
