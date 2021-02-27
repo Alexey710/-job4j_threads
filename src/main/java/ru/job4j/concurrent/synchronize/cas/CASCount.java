@@ -19,7 +19,6 @@ public class CASCount {
     }
 
     public int get() {
-        Integer current = count.get();
-        return current;
+        return count.get();
     }
 }
