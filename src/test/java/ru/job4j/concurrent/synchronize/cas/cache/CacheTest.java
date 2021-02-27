@@ -29,12 +29,12 @@ public class CacheTest {
         cache.update(base);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void delete() {
         Cache cache = new Cache();
         Base base = new Base(1, 0);
         cache.add(base);
         cache.delete(base);
-        Assert.assertTrue(cache.update(base));
+        Assert.assertFalse(cache.update(base));
     }
 }
