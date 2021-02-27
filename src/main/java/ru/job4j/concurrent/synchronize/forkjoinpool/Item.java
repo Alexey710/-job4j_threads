@@ -10,4 +10,9 @@ public class Item {
     public int getIndex() {
         return index;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" + "index=" + index + '}';
+    }
 }
