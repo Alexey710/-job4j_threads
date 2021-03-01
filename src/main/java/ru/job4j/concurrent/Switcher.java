@@ -1,7 +1,6 @@
 package ru.job4j.concurrent;
 
 public class Switcher {
-    private volatile boolean yield = false;
 
     public void print(String name) {
         synchronized (this) {
