@@ -3,7 +3,7 @@ package ru.job4j.concurrent.synchronize.forkjoinpool;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ForkTest {
+public class TaskTest {
 
     @Test
     public void whenSearchItemByIndexIsParallel() {
@@ -11,8 +11,7 @@ public class ForkTest {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = new Item(arr.length - i);
         }
-        Fork fork = new Fork(0, 10, arr, 5);
-        Item rsl = fork.searchItemByIndex();
+        Item rsl = new LauncherTasks().searchItemByIndex(arr, 5);
         Assert.assertEquals(5, rsl.getIndex());
     }
 
@@ -22,8 +21,7 @@ public class ForkTest {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = new Item(arr.length - i);
         }
-        Fork fork = new Fork(0, 10, arr, 50);
-        Item rsl = fork.searchItemByIndex();
+        Item rsl = new LauncherTasks().searchItemByIndex(arr, 50);
         Assert.assertNull(rsl);
     }
 
@@ -33,8 +31,7 @@ public class ForkTest {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = new Item(arr.length - i);
         }
-        Fork fork = new Fork(0, 8, arr, 5);
-        Item rsl = fork.searchItemByIndex();
+        Item rsl = new LauncherTasks().searchItemByIndex(arr, 5);
         Assert.assertEquals(5, rsl.getIndex());
     }
 
