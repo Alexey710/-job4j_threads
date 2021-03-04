@@ -1,26 +1,39 @@
 package ru.job4j.concurrent;
 
-public class Switcher {
+public class MasterSlaveBarrier {
 
-    public void print(String name) {
+    public void tryMaster() {
+        doneMaster();
+    }
+
+    public void trySlave() {
+        doneSlave();
+    }
+
+    public void doneMaster() {
         synchronized (this) {
+            System.out.println("Thread A");
             notify();
-            System.out.println(name);
+        }
+    }
+
+    public void doneSlave() {
+        synchronized (this) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println("Thread B");
         }
-
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Switcher switcher = new Switcher();
+        MasterSlaveBarrier masterSlaveBarrier = new MasterSlaveBarrier();
         Thread first = new Thread(
                 () -> {
                     while (true) {
-                        switcher.print("Thread A");
+                        masterSlaveBarrier.trySlave();
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
@@ -32,7 +45,7 @@ public class Switcher {
         Thread second = new Thread(
                 () -> {
                     while (true) {
-                        switcher.print("Thread B");
+                        masterSlaveBarrier.tryMaster();
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
