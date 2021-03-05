@@ -1,6 +1,7 @@
 package ru.job4j.concurrent;
 
 public class MasterSlaveBarrier {
+    private boolean flag = false;
 
     public void tryMaster() {
         doneMaster();
@@ -12,7 +13,10 @@ public class MasterSlaveBarrier {
 
     public void doneMaster() {
         synchronized (this) {
-            System.out.println("Thread A");
+            if (!flag) {
+                System.out.println("Thread A");
+            }
+            flag = true;
             notify();
         }
     }
@@ -25,6 +29,7 @@ public class MasterSlaveBarrier {
                 e.printStackTrace();
             }
             System.out.println("Thread B");
+                flag = false;
         }
     }
 
